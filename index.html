@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Caldero Mágico — Restaurante Temático de Fantasía</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=Raleway:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #050810;
+    --deep: #0A0F1E;
+    --forest: #081A0F;
+    --purple-deep: #120820;
+    --neon-green: #39FF8A;
+    --neon-blue: #00D4FF;
+    --neon-pink: #FF2D78;
+    --neon-purple: #BF5FFF;
+    --neon-yellow: #FFE135;
+    --gold-magic: #FFD700;
+    --leaf: #2ECC71;
+    --leaf-dark: #1A7A43;
+    --flower-white: #F0F0FF;
+    --magic-muted: rgba(180,180,255,0.55);
+    --text-bright: #EEF0FF;
+    --text-soft: rgba(200,210,255,0.75);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--void);
+    color: var(--text-bright);
+    font-family: 'Raleway', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ── PARTICLES / FIREFLIES ── */
+  .fireflies {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+  }
+
+  .fly {
+    position: absolute;
+    width: 3px; height: 3px;
+    border-radius: 50%;
+    animation: drift linear infinite;
+    opacity: 0;
+  }
+
+  @keyframes drift {
+    0%   { transform: translate(0,0) scale(0); opacity: 0; }
+    10%  { opacity: 1; transform: scale(1.5); }
+    50%  { opacity: 0.7; }
+    90%  { opacity: 0.3; }
+    100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.1rem 3rem;
+    background: linear-gradient(to bottom, rgba(5,8,16,0.97) 0%, transparent 100%);
+    backdrop-filter: blur(6px);
+  }
+
+  .nav-logo {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 1rem;
+    color: var(--neon-green);
+    text-shadow: 0 0 18px rgba(57,255,138,0.7);
+    letter-spacing: 0.05em;
+  }
+
+  .nav-logo span { color: var(--neon-blue); text-shadow: 0 0 18px rgba(0,212,255,0.7); }
+
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a {
+    text-decoration: none;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(200,210,255,0.7);
+    transition: color 0.3s, text-shadow 0.3s;
+  }
+  .nav-links a:hover {
+    color: var(--neon-green);
+    text-shadow: 0 0 12px rgba(57,255,138,0.8);
+  }
+
+  .nav-cta {
+    border: 1px solid var(--neon-purple);
+    color: var(--neon-purple) !important;
+    padding: 0.4rem 1.2rem;
+    border-radius: 50px;
+    text-shadow: 0 0 10px rgba(191,95,255,0.6) !important;
+    transition: all 0.3s !important;
+  }
+  .nav-cta:hover {
+    background: var(--neon-purple) !important;
+    color: var(--void) !important;
+    text-shadow: none !important;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    position: relative;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 80%, rgba(57,255,138,0.12) 0%, transparent 45%),
+      radial-gradient(ellipse at 80% 20%, rgba(0,212,255,0.12) 0%, transparent 45%),
+      radial-gradient(ellipse at 50% 50%, rgba(191,95,255,0.08) 0%, transparent 60%),
+      linear-gradient(160deg, #050810 0%, #080F1A 40%, #060C14 100%);
+  }
+
+  /* Floating leaves */
+  .leaf-float {
+    position: absolute;
+    font-size: 1.5rem;
+    animation: leafFall linear infinite;
+    pointer-events: none;
+    filter: drop-shadow(0 0 6px rgba(57,255,138,0.6));
+  }
+
+  @keyframes leafFall {
+    0%   { transform: translateY(-60px) rotate(0deg); opacity: 0; }
+    10%  { opacity: 0.8; }
+    90%  { opacity: 0.4; }
+    100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* Magic mist */
+  .mist {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 200px;
+    background: linear-gradient(to top, rgba(57,255,138,0.06), rgba(0,212,255,0.04), transparent);
+    animation: mistMove 8s ease-in-out infinite alternate;
+  }
+
+  @keyframes mistMove {
+    0%   { transform: scaleX(1) translateX(0); opacity: 0.6; }
+    100% { transform: scaleX(1.05) translateX(2%); opacity: 1; }
+  }
+
+  .hero-content { position: relative; z-index: 2; padding: 0 1rem; }
+
+  .hero-badge {
+    display: inline-block;
+    border: 1px solid rgba(57,255,138,0.4);
+    background: rgba(57,255,138,0.06);
+    color: var(--neon-green);
+    font-size: 0.68rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    padding: 0.4rem 1.5rem;
+    border-radius: 50px;
+    margin-bottom: 2rem;
+    text-shadow: 0 0 10px rgba(57,255,138,0.6);
+    animation: fadeUp 0.8s ease 0.3s both;
+  }
+
+  .hero-title {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: clamp(2.2rem, 6vw, 5.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+    animation: fadeUp 0.9s ease 0.6s both;
+  }
+
+  .hero-title .line1 {
+    display: block;
+    background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 20px rgba(57,255,138,0.4));
+  }
+
+  .hero-title .line2 {
+    display: block;
+    background: linear-gradient(90deg, var(--neon-purple), var(--neon-pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 0.55em;
+    letter-spacing: 0.12em;
+    filter: drop-shadow(0 0 15px rgba(191,95,255,0.4));
+  }
+
+  .hero-divider {
+    display: flex; align-items: center; justify-content: center; gap: 1.2rem;
+    margin: 2rem 0;
+    animation: fadeUp 0.8s ease 0.9s both;
+  }
+
+  .hero-divider span {
+    height: 1px; width: 80px;
+    background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+  }
+
+  .hero-divider-icon {
+    font-size: 1.4rem;
+    animation: spinGlow 4s linear infinite;
+  }
+
+  @keyframes spinGlow {
+    0%,100% { filter: drop-shadow(0 0 6px var(--neon-green)); transform: rotate(0deg); }
+    50% { filter: drop-shadow(0 0 12px var(--neon-blue)); transform: rotate(180deg); }
+  }
+
+  .hero-sub {
+    font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+    color: var(--text-soft);
+    line-height: 1.8;
+    max-width: 540px;
+    margin: 0 auto 3rem;
+    animation: fadeUp 0.8s ease 1.1s both;
+  }
+
+  .hero-cta {
+    display: flex; gap: 1.2rem; justify-content: center; flex-wrap: wrap;
+    animation: fadeUp 0.8s ease 1.4s both;
+  }
+
+  .btn-magic {
+    background: linear-gradient(135deg, var(--neon-green), var(--neon-blue));
+    color: var(--void);
+    padding: 0.85rem 2.4rem;
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 0 30px rgba(57,255,138,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .btn-magic:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 0 50px rgba(57,255,138,0.7);
+  }
+
+  .btn-ghost {
+    border: 1px solid rgba(191,95,255,0.5);
+    color: var(--neon-purple);
+    padding: 0.85rem 2.4rem;
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 50px;
+    transition: all 0.3s;
+    text-shadow: 0 0 10px rgba(191,95,255,0.4);
+  }
+
+  .btn-ghost:hover {
+    background: rgba(191,95,255,0.15);
+    box-shadow: 0 0 30px rgba(191,95,255,0.3);
+  }
+
+  .hero-scroll {
+    position: absolute; bottom: 2rem;
+    display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+    animation: fadeUp 0.8s ease 2s both;
+  }
+
+  .hero-scroll p { font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--magic-muted); }
+
+  .scroll-orb {
+    width: 28px; height: 42px;
+    border: 1px solid rgba(57,255,138,0.4);
+    border-radius: 14px;
+    position: relative;
+    display: flex; justify-content: center;
+  }
+
+  .scroll-orb::before {
+    content: '';
+    position: absolute; top: 6px;
+    width: 4px; height: 8px;
+    background: var(--neon-green);
+    border-radius: 2px;
+    animation: scrollDown 2s ease-in-out infinite;
+    box-shadow: 0 0 8px var(--neon-green);
+  }
+
+  @keyframes scrollDown {
+    0%   { top: 6px; opacity: 1; }
+    80%  { top: 22px; opacity: 0; }
+    100% { top: 6px; opacity: 0; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── COMMONS ── */
+  section { padding: 6rem 0; position: relative; z-index: 1; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+  .container-sm { max-width: 760px; margin: 0 auto; padding: 0 2rem; }
+
+  .eyebrow {
+    font-size: 0.68rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: var(--neon-green);
+    text-shadow: 0 0 12px rgba(57,255,138,0.6);
+    display: block;
+    margin-bottom: 0.8rem;
+  }
+
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--text-bright);
+  }
+
+  .section-title em {
+    font-style: normal;
+    background: linear-gradient(90deg, var(--neon-green), var(--neon-blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── MAGIC LINE DIVIDER ── */
+  .magic-line {
+    display: flex; align-items: center; gap: 1rem;
+    margin: 3rem 0;
+  }
+
+  .magic-line span {
+    flex: 1; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(57,255,138,0.4), transparent);
+  }
+
+  .magic-line i { color: var(--neon-green); font-size: 0.8rem; font-style: normal; }
+
+  /* ── STORY SECTION ── */
+  .story { background: var(--deep); }
+
+  .story::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 0% 50%, rgba(57,255,138,0.06) 0%, transparent 55%),
+      radial-gradient(ellipse at 100% 50%, rgba(0,212,255,0.05) 0%, transparent 55%);
+    pointer-events: none;
+  }
+
+  .story-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  .story-visual {
+    position: relative;
+    height: 560px;
+  }
+
+  .story-orb {
+    position: absolute;
+    border-radius: 50%;
+    animation: orbFloat ease-in-out infinite alternate;
+  }
+
+  @keyframes orbFloat {
+    from { transform: translateY(0px); }
+    to   { transform: translateY(-16px); }
+  }
+
+  .orb-main {
+    inset: 0;
+    background:
+      radial-gradient(circle at 35% 35%, rgba(57,255,138,0.15), transparent 60%),
+      radial-gradient(circle at 65% 70%, rgba(0,212,255,0.12), transparent 50%),
+      linear-gradient(135deg, #060E06, #0A1A1A);
+    border: 1px solid rgba(57,255,138,0.2);
+    border-radius: 20px;
+    overflow: hidden;
+    animation-duration: 6s;
+  }
+
+  .orb-main::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 50% 50%, rgba(57,255,138,0.08), transparent 70%);
+    animation: mistMove 5s ease-in-out infinite alternate;
+  }
+
+  .story-center-icon {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 2;
+  }
+
+  .cauldron-svg {
+    width: 160px; height: 160px;
+    filter: drop-shadow(0 0 30px rgba(57,255,138,0.5));
+  }
+
+  .floating-elements {
+    position: absolute; inset: 0; pointer-events: none;
+  }
+
+  .fe {
+    position: absolute;
+    font-size: 1.6rem;
+    animation: feFloat ease-in-out infinite alternate;
+    filter: drop-shadow(0 0 8px rgba(57,255,138,0.5));
+  }
+
+  @keyframes feFloat {
+    from { transform: translateY(0) rotate(-5deg); }
+    to   { transform: translateY(-12px) rotate(5deg); }
+  }
+
+  .story-text p {
+    color: var(--text-soft);
+    line-height: 1.9;
+    font-size: 1rem;
+    margin-bottom: 1.4rem;
+  }
+
+  .story-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-top: 2.5rem;
+  }
+
+  .stat-orb {
+    text-align: center;
+    padding: 1.4rem 1rem;
+    border: 1px solid rgba(57,255,138,0.2);
+    border-radius: 12px;
+    background: rgba(57,255,138,0.03);
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, background 0.3s;
+  }
+
+  .stat-orb:hover {
+    border-color: rgba(57,255,138,0.5);
+    background: rgba(57,255,138,0.07);
+  }
+
+  .stat-orb::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--neon-green), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .stat-orb:hover::after { opacity: 1; }
+
+  .stat-num {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 2rem;
+    color: var(--neon-green);
+    text-shadow: 0 0 20px rgba(57,255,138,0.6);
+    display: block;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .stat-lbl {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--magic-muted);
+  }
+
+  /* ── WORLDS / AREAS ── */
+  .worlds { background: var(--purple-deep); }
+
+  .worlds::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(191,95,255,0.1) 0%, transparent 60%),
+      radial-gradient(ellipse at 50% 100%, rgba(57,255,138,0.06) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  .worlds-header { text-align: center; margin-bottom: 4rem; }
+
+  .worlds-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .world-card {
+    position: relative;
+    padding: 2.2rem;
+    border: 1px solid rgba(191,95,255,0.2);
+    border-radius: 16px;
+    background: rgba(18,8,32,0.8);
+    overflow: hidden;
+    cursor: default;
+    transition: transform 0.4s ease, border-color 0.4s;
+  }
+
+  .world-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    opacity: 0;
+    transition: opacity 0.4s;
+    border-radius: 16px;
+  }
+
+  .world-card:nth-child(1)::before { background: radial-gradient(ellipse at 50% 0%, rgba(57,255,138,0.1), transparent 70%); }
+  .world-card:nth-child(2)::before { background: radial-gradient(ellipse at 50% 0%, rgba(0,212,255,0.1), transparent 70%); }
+  .world-card:nth-child(3)::before { background: radial-gradient(ellipse at 50% 0%, rgba(191,95,255,0.1), transparent 70%); }
+  .world-card:nth-child(4)::before { background: radial-gradient(ellipse at 50% 0%, rgba(255,45,120,0.1), transparent 70%); }
+  .world-card:nth-child(5)::before { background: radial-gradient(ellipse at 50% 0%, rgba(255,225,53,0.1), transparent 70%); }
+  .world-card:nth-child(6)::before { background: radial-gradient(ellipse at 50% 0%, rgba(57,255,138,0.08), transparent 70%); }
+
+  .world-card:hover { transform: translateY(-6px); border-color: rgba(57,255,138,0.4); }
+  .world-card:hover::before { opacity: 1; }
+
+  .world-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 1.2rem;
+    filter: drop-shadow(0 0 10px rgba(57,255,138,0.5));
+  }
+
+  .world-name {
+    font-family: 'Cinzel', serif;
+    font-size: 1.05rem;
+    color: var(--text-bright);
+    margin-bottom: 0.6rem;
+  }
+
+  .world-color {
+    display: inline-block;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.8rem;
+    border-radius: 20px;
+    margin-bottom: 0.9rem;
+  }
+
+  .world-desc { font-size: 0.88rem; color: var(--magic-muted); line-height: 1.7; }
+
+  /* ── MENU ── */
+  .menu-s {
+    background: var(--forest);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .menu-s::before {
+    content: '✦ MENÚ MÁGICO ✦';
+    position: absolute;
+    right: -5rem; top: 2rem;
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 8rem;
+    color: rgba(57,255,138,0.03);
+    white-space: nowrap;
+    pointer-events: none;
+    line-height: 1;
+    writing-mode: vertical-lr;
+  }
+
+  .menu-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 3.5rem; flex-wrap: wrap; gap: 1.5rem;
+  }
+
+  .menu-tabs { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+  .tab {
+    border: 1px solid rgba(57,255,138,0.25);
+    color: var(--magic-muted);
+    background: none;
+    padding: 0.4rem 1.1rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 50px;
+    font-family: 'Raleway', sans-serif;
+    transition: all 0.3s;
+  }
+
+  .tab.on, .tab:hover {
+    border-color: var(--neon-green);
+    color: var(--neon-green);
+    background: rgba(57,255,138,0.07);
+    text-shadow: 0 0 10px rgba(57,255,138,0.5);
+  }
+
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: rgba(57,255,138,0.1);
+  }
+
+  .menu-row {
+    background: var(--forest);
+    padding: 1.6rem 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 1rem;
+    transition: background 0.3s;
+  }
+
+  .menu-row:hover { background: rgba(57,255,138,0.04); }
+
+  .menu-row-name {
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    color: var(--text-bright);
+    margin-bottom: 0.25rem;
+  }
+
+  .menu-row-desc {
+    font-size: 0.82rem;
+    color: var(--magic-muted);
+    font-style: italic;
+  }
+
+  .menu-magic-tag {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.6rem;
+    border-radius: 20px;
+    background: rgba(191,95,255,0.15);
+    border: 1px solid rgba(191,95,255,0.3);
+    color: var(--neon-purple);
+    margin-bottom: 0.3rem;
+    display: inline-block;
+  }
+
+  .menu-price {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 0.95rem;
+    color: var(--neon-green);
+    text-shadow: 0 0 10px rgba(57,255,138,0.4);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* ── EXPERIENCES ── */
+  .exp-section {
+    background: var(--deep);
+    position: relative;
+  }
+
+  .exp-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 80% 50%, rgba(0,212,255,0.07) 0%, transparent 55%);
+    pointer-events: none;
+  }
+
+  .exp-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 3.5rem;
+  }
+
+  .exp-card {
+    position: relative;
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 16px;
+    overflow: hidden;
+    background: rgba(0,15,30,0.7);
+    padding: 2.2rem 2rem;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .exp-card:hover {
+    border-color: rgba(0,212,255,0.5);
+    transform: translateY(-4px);
+  }
+
+  .exp-glow {
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+  }
+
+  .exp-tag {
+    font-size: 0.63rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--neon-blue);
+    text-shadow: 0 0 8px rgba(0,212,255,0.6);
+    display: block;
+    margin-bottom: 0.9rem;
+  }
+
+  .exp-name {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    color: var(--text-bright);
+    margin-bottom: 0.8rem;
+    line-height: 1.3;
+  }
+
+  .exp-desc {
+    font-size: 0.87rem;
+    color: var(--magic-muted);
+    line-height: 1.75;
+    margin-bottom: 1.8rem;
+  }
+
+  .exp-action {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--neon-blue);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 0.5rem;
+    transition: gap 0.3s, text-shadow 0.3s;
+  }
+
+  .exp-action:hover {
+    gap: 1rem;
+    text-shadow: 0 0 10px rgba(0,212,255,0.6);
+  }
+
+  /* ── GALLERY STRIP ── */
+  .gallery-strip {
+    background: var(--void);
+    padding: 4rem 0;
+    overflow: hidden;
+  }
+
+  .strip-track {
+    display: flex;
+    gap: 1.5rem;
+    animation: stripScroll 25s linear infinite;
+    width: max-content;
+  }
+
+  @keyframes stripScroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .strip-item {
+    width: 240px; height: 160px;
+    border: 1px solid rgba(57,255,138,0.15);
+    border-radius: 12px;
+    background: linear-gradient(135deg, #080F0A, #0F1A10);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+    gap: 0.8rem;
+    flex-shrink: 0;
+    font-size: 2rem;
+    color: var(--neon-green);
+    text-align: center;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    color: var(--magic-muted);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .strip-item::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 50%, rgba(57,255,138,0.05), transparent 70%);
+  }
+
+  .strip-emoji { font-size: 2rem; filter: drop-shadow(0 0 8px rgba(57,255,138,0.5)); }
+
+  /* ── RESERVAS ── */
+  .reservas {
+    background: linear-gradient(160deg, #050810, #0A0F1E, #060C14);
+    text-align: center;
+    padding: 8rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .reservas::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 50% 50%, rgba(57,255,138,0.08), transparent 55%),
+      radial-gradient(ellipse at 20% 80%, rgba(191,95,255,0.06), transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(0,212,255,0.06), transparent 50%);
+    pointer-events: none;
+  }
+
+  .reservas-icon {
+    font-size: 4rem;
+    display: block;
+    margin: 0 auto 1.5rem;
+    filter: drop-shadow(0 0 20px rgba(57,255,138,0.6));
+    animation: spinGlow 4s linear infinite;
+  }
+
+  .reservas-title {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    background: linear-gradient(90deg, var(--neon-green), var(--neon-blue), var(--neon-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: relative;
+  }
+
+  .reservas-sub {
+    font-size: 1.05rem;
+    color: var(--text-soft);
+    margin-bottom: 3rem;
+    font-style: italic;
+  }
+
+  .reservas-form {
+    display: flex; gap: 1rem; justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+  }
+
+  .reservas-form input, .reservas-form select {
+    background: rgba(57,255,138,0.04);
+    border: 1px solid rgba(57,255,138,0.25);
+    color: var(--text-bright);
+    padding: 0.85rem 1.3rem;
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    min-width: 160px;
+  }
+
+  .reservas-form input::placeholder { color: var(--magic-muted); }
+  .reservas-form input:focus, .reservas-form select:focus {
+    border-color: var(--neon-green);
+    box-shadow: 0 0 16px rgba(57,255,138,0.2);
+  }
+
+  .reservas-form select option { background: #0A0F1E; }
+
+  /* ── UBICACION ── */
+  .ubicacion { background: var(--purple-deep); }
+
+  .ubi-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+
+  .ubi-map {
+    height: 420px;
+    border: 1px solid rgba(57,255,138,0.2);
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .ubi-map iframe {
+    width: 100%; height: 100%;
+    border: none;
+    filter: grayscale(40%) invert(0.85) hue-rotate(140deg) brightness(0.6) saturate(1.5);
+  }
+
+  .ubi-item {
+    display: flex; gap: 1.2rem;
+    padding: 1.3rem 0;
+    border-bottom: 1px solid rgba(57,255,138,0.1);
+    align-items: flex-start;
+  }
+
+  .ubi-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--neon-green);
+    box-shadow: 0 0 10px var(--neon-green);
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+
+  .ubi-lbl {
+    font-size: 0.67rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--neon-green);
+    text-shadow: 0 0 8px rgba(57,255,138,0.4);
+    margin-bottom: 0.3rem;
+  }
+
+  .ubi-val {
+    font-size: 0.95rem;
+    color: var(--text-bright);
+    line-height: 1.6;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #020407;
+    padding: 4rem 0 2rem;
+    border-top: 1px solid rgba(57,255,138,0.15);
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  .footer-brand {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 1.1rem;
+    color: var(--neon-green);
+    text-shadow: 0 0 15px rgba(57,255,138,0.5);
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .footer-tagline {
+    font-size: 0.85rem;
+    color: var(--magic-muted);
+    line-height: 1.7;
+    max-width: 260px;
+  }
+
+  .footer-col h4 {
+    font-size: 0.66rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--neon-green);
+    text-shadow: 0 0 8px rgba(57,255,138,0.4);
+    margin-bottom: 1.2rem;
+  }
+
+  .footer-col ul { list-style: none; }
+  .footer-col li {
+    font-size: 0.85rem;
+    color: var(--magic-muted);
+    margin-bottom: 0.6rem;
+    cursor: default;
+    transition: color 0.3s;
+  }
+  .footer-col li:hover { color: var(--text-bright); }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(57,255,138,0.1);
+    padding-top: 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.75rem;
+    color: var(--magic-muted);
+    flex-wrap: wrap; gap: 1rem;
+  }
+
+  .social-row { display: flex; gap: 0.8rem; }
+
+  .soc-btn {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(57,255,138,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--magic-muted);
+    font-size: 0.8rem;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .soc-btn:hover {
+    border-color: var(--neon-green);
+    color: var(--neon-green);
+    box-shadow: 0 0 14px rgba(57,255,138,0.4);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .story-grid, .ubi-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .worlds-grid, .exp-grid { grid-template-columns: 1fr 1fr; }
+    .menu-grid { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    .story-visual { height: 340px; }
+  }
+
+  @media (max-width: 600px) {
+    .worlds-grid, .exp-grid { grid-template-columns: 1fr; }
+    .hero-title { font-size: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- FIREFLIES -->
+<div class="fireflies" id="ff"></div>
+
+<!-- FLOATING LEAVES -->
+<div id="leaves" style="position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">El Caldero<span> Mágico</span></div>
+  <ul class="nav-links">
+    <li><a href="#historia">El Mundo</a></li>
+    <li><a href="#mundos">Áreas</a></li>
+    <li><a href="#menu">Menú</a></li>
+    <li><a href="#experiencias">Experiencias</a></li>
+    <li><a href="#ubicacion">Ubicación</a></li>
+    <li><a href="#reservas" class="nav-cta">Reservar</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero-bg"></div>
+  <div class="mist"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">✦ Restaurante Temático de Fantasía ✦</div>
+
+    <h1 class="hero-title">
+      <span class="line1">El Caldero</span>
+      <span class="line2">Mágico</span>
+    </h1>
+
+    <div class="hero-divider">
+      <span></span>
+      <div class="hero-divider-icon">🌿</div>
+      <span></span>
+    </div>
+
+    <p class="hero-sub">Entra a un mundo donde la fantasía y el sabor se fusionan. Árboles de luz, techos de flores y magia en cada plato te esperan.</p>
+
+    <div class="hero-cta">
+      <a href="#reservas" class="btn-magic">Reservar Mesa Mágica</a>
+      <a href="#mundos" class="btn-ghost">Explorar los Mundos</a>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <p>Descubrir</p>
+    <div class="scroll-orb"></div>
+  </div>
+</section>
+
+<!-- HISTORIA -->
+<section class="story" id="historia">
+  <div class="container">
+    <div class="story-grid">
+      <div class="story-visual">
+        <div class="story-orb orb-main">
+          <div class="story-center-icon">
+            <!-- Cauldron SVG -->
+            <svg class="cauldron-svg" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Steam wisps -->
+              <path d="M60 35 Q55 20 62 10 Q68 2 64 -5" stroke="#39FF8A" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.7">
+                <animate attributeName="opacity" values="0.7;0.2;0.7" dur="2.5s" repeatCount="indefinite"/>
+              </path>
+              <path d="M80 28 Q76 14 82 4 Q88 -3 84 -10" stroke="#00D4FF" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.7">
+                <animate attributeName="opacity" values="0.5;1;0.5" dur="3s" repeatCount="indefinite"/>
+              </path>
+              <path d="M100 35 Q105 20 98 10 Q92 2 96 -5" stroke="#BF5FFF" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.7">
+                <animate attributeName="opacity" values="0.7;0.2;0.7" dur="2s" repeatCount="indefinite"/>
+              </path>
+              <!-- Cauldron body -->
+              <ellipse cx="80" cy="115" rx="55" ry="14" fill="#1A7A43" opacity="0.8"/>
+              <path d="M28 80 Q25 115 80 129 Q135 115 132 80 Q120 50 80 45 Q40 50 28 80Z" fill="#0A3D1F" stroke="#39FF8A" stroke-width="1.5" opacity="0.9"/>
+              <!-- Liquid surface -->
+              <ellipse cx="80" cy="80" rx="46" ry="12" fill="#1A9A4A" opacity="0.8">
+                <animate attributeName="ry" values="12;14;12" dur="2s" repeatCount="indefinite"/>
+              </ellipse>
+              <!-- Bubbles -->
+              <circle cx="68" cy="77" r="3" fill="#39FF8A" opacity="0.8">
+                <animate attributeName="cy" values="77;70;77" dur="1.5s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.8;0;0.8" dur="1.5s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="88" cy="80" r="2" fill="#00D4FF" opacity="0.8">
+                <animate attributeName="cy" values="80;72;80" dur="2s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.8;0;0.8" dur="2s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="76" cy="83" r="2.5" fill="#BF5FFF" opacity="0.8">
+                <animate attributeName="cy" values="83;75;83" dur="1.8s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0.8;0;0.8" dur="1.8s" repeatCount="indefinite"/>
+              </circle>
+              <!-- Handles -->
+              <path d="M30 85 Q16 85 16 75 Q16 65 30 70" stroke="#39FF8A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              <path d="M130 85 Q144 85 144 75 Q144 65 130 70" stroke="#39FF8A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              <!-- Glow -->
+              <ellipse cx="80" cy="115" rx="55" ry="10" fill="#39FF8A" opacity="0.08">
+                <animate attributeName="opacity" values="0.08;0.15;0.08" dur="2s" repeatCount="indefinite"/>
+              </ellipse>
+            </svg>
+          </div>
+
+          <div class="floating-elements">
+            <span class="fe" style="top:10%;left:10%;animation-duration:4s;">🌿</span>
+            <span class="fe" style="top:15%;right:12%;animation-duration:5s;animation-delay:0.5s;">🌻</span>
+            <span class="fe" style="bottom:20%;left:8%;animation-duration:4.5s;animation-delay:1s;">✨</span>
+            <span class="fe" style="bottom:25%;right:10%;animation-duration:3.8s;animation-delay:0.3s;">🍄</span>
+            <span class="fe" style="top:55%;left:5%;animation-duration:5.2s;animation-delay:0.8s;">🦋</span>
+            <span class="fe" style="top:40%;right:5%;animation-duration:4.2s;animation-delay:1.5s;">⭐</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="story-text">
+        <span class="eyebrow">Nuestro universo</span>
+        <h2 class="section-title">Un lugar donde<br>la <em>magia</em> es real</h2>
+
+        <div class="magic-line"><span></span><i>✦</i><span></span></div>
+
+        <p>El Caldero Mágico nació del sueño de crear un espacio donde la realidad y la fantasía se disuelven en una sola experiencia. Cada rincón es un mundo distinto, cada plato une hechizo preparado con pasión.</p>
+
+        <p>Árboles de girasoles que brillan en la oscuridad, techos tapizados de flores eternas, puentes de selva colgantes y criaturas fantásticas que dan la bienvenida a cada visitante.</p>
+
+        <p>Más que un restaurante, somos una puerta hacia otro mundo — uno lleno de sabores extraordinarios y momentos que quedarán grabados para siempre.</p>
+
+        <div class="story-stats">
+          <div class="stat-orb">
+            <span class="stat-num">6+</span>
+            <span class="stat-lbl">Mundos temáticos</span>
+          </div>
+          <div class="stat-orb">
+            <span class="stat-num">✦</span>
+            <span class="stat-lbl">Magia sin límites</span>
+          </div>
+          <div class="stat-orb">
+            <span class="stat-num">∞</span>
+            <span class="stat-lbl">Recuerdos únicos</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MUNDOS / ÁREAS -->
+<section class="worlds" id="mundos">
+  <div class="container">
+    <div class="worlds-header">
+      <span class="eyebrow">Los mundos</span>
+      <h2 class="section-title">Cada área, <em>un universo</em></h2>
+    </div>
+
+    <div class="worlds-grid">
+      <div class="world-card">
+        <span class="world-icon">🌻</span>
+        <div class="world-name">El Jardín de los Girasoles</div>
+        <div class="world-color" style="background:rgba(255,225,53,0.1);border:1px solid rgba(255,225,53,0.3);color:#FFE135;">Luz Dorada</div>
+        <p class="world-desc">El árbol central del Caldero, cubierto de girasoles luminosos y flores que brillan con vida propia bajo las luces de colores.</p>
+      </div>
+
+      <div class="world-card">
+        <span class="world-icon">🌿</span>
+        <div class="world-name">La Selva Encantada</div>
+        <div class="world-color" style="background:rgba(57,255,138,0.1);border:1px solid rgba(57,255,138,0.3);color:#39FF8A;">Verde Mágico</div>
+        <p class="world-desc">Lianas que cuelgan del techo floral, puentes de red entre la vegetación y el murmullo secreto del bosque que te rodea.</p>
+      </div>
+
+      <div class="world-card">
+        <span class="world-icon">🎤</span>
+        <div class="world-name">El Escenario Mágico</div>
+        <div class="world-color" style="background:rgba(191,95,255,0.1);border:1px solid rgba(191,95,255,0.3);color:#BF5FFF;">Púrpura Místico</div>
+        <p class="world-desc">Luces de show en azul y verde, tablero de ajedrez en las paredes y un espacio de música en vivo que convierte la noche en espectáculo.</p>
+      </div>
+
+      <div class="world-card">
+        <span class="world-icon">🌸</span>
+        <div class="world-name">El Cielo de Flores</div>
+        <div class="world-color" style="background:rgba(255,45,120,0.1);border:1px solid rgba(255,45,120,0.3);color:#FF2D78;">Rosa Fantástico</div>
+        <p class="world-desc">Un techo completamente cubierto de flores blancas y rosas, como flotar en una nube perfumada del mundo de los sueños.</p>
+      </div>
+
+      <div class="world-card">
+        <span class="world-icon">🎃</span>
+        <div class="world-name">El Rincón Fantástico</div>
+        <div class="world-color" style="background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);color:#00D4FF;">Azul Celeste</div>
+        <p class="world-desc">Criaturas de fantasía dan la bienvenida: desde el Grinch hasta duendes y personajes que hacen de cada visita algo irrepetible.</p>
+      </div>
+
+      <div class="world-card">
+        <span class="world-icon">🕯️</span>
+        <div class="world-name">La Sala del Caldero</div>
+        <div class="world-color" style="background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);color:#FFD700;">Oro Antiguo</div>
+        <p class="world-desc">El corazón del restaurante, con linternas antiguas, el caldero central burbujeante y una atmósfera de hechizería ancestral.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENÚ -->
+<section class="menu-s" id="menu">
+  <div class="container">
+    <div class="menu-header">
+      <div>
+        <span class="eyebrow">La cocina encantada</span>
+        <h2 class="section-title">El <em>Menú</em> del Caldero</h2>
+      </div>
+      <div class="menu-tabs">
+        <button class="tab on">Hechizos Mayores</button>
+        <button class="tab">Pociones</button>
+        <button class="tab">Del Jardín</button>
+        <button class="tab">Postres Mágicos</button>
+      </div>
+    </div>
+
+    <div class="menu-grid">
+      <div class="menu-row">
+        <div>
+          <div class="menu-magic-tag">⭐ Especialidad</div>
+          <div class="menu-row-name">Caldero de Brujas</div>
+          <div class="menu-row-desc">Sopa cremosa servida en mini caldero humeante, con hongos del bosque y hierbas secretas</div>
+        </div>
+        <div class="menu-price">$12.50</div>
+      </div>
+
+      <div class="menu-row">
+        <div>
+          <div class="menu-magic-tag">🌿 Nuevo Hechizo</div>
+          <div class="menu-row-name">Dragón de Fuego</div>
+          <div class="menu-row-desc">Costillas en salsa picante con llama de fuego al servir, arroz encantado y yuca dorada</div>
+        </div>
+        <div class="menu-price">$18.00</div>
+      </div>
+
+      <div class="menu-row">
+        <div>
+          <div class="menu-row-name">Hada del Bosque</div>
+          <div class="menu-row-desc">Bowl de ensalada con flores comestibles, quinua de colores y aderezo de hierbas mágicas</div>
+        </div>
+        <div class="menu-price">$11.00</div>
+      </div>
+
+      <div class="menu-row">
+        <div>
+          <div class="menu-magic-tag">✨ Fan Favorite</div>
+          <div class="menu-row-name">Pollo del Unicornio</div>
+          <div class="menu-row-desc">Pechuga rellena con queso encantado, salsa de arcoíris y papas en espiral</div>
+        </div>
+        <div class="menu-price">$16.50</div>
+      </div>
+
+      <div class="menu-row">
+        <div>
+          <div class="menu-row-name">Pasta del Duende Verde</div>
+          <div class="menu-row-desc">Tallarines de espinaca al pesto de albahaca mágica, tomates cherry y parmesano encantado</div>
+        </div>
+        <div class="menu-price">$14.00</div>
+      </div>
+
+      <div class="menu-row">
+        <div>
+          <div class="menu-magic-tag">🔥 Sellado en Mesa</div>
+          <div class="menu-row-name">Lomo del Mago</div>
+          <div class="menu-row-desc">Lomo fino a la plancha, servido en piedra volcánica con hierbas y sal de montaña</div>
+        </div>
+        <div class="menu-price">$24.00</div>
+      </div>
+
+      <div class="menu-row">
+        <div>
+          <div class="menu-row-name">Tilapia del Lago Encantado</div>
+          <div class="menu-row-desc">Filete en salsa de maracuyá y jengibre, con purée de papa azul y vegetales del jardín</div>
+        </div>
+        <div class="menu-price">$15.00</div>
+      </div>
+
+      <div class="menu-row">
+        <div>
+          <div class="menu-magic-tag">🌟 Para compartir</div>
+          <div class="menu-row-name">El Gran Banquete Mágico</div>
+          <div class="menu-row-desc">Tabla de antipastos, carnes a la brasa, fondues y salsas secretas para 4 personas</div>
+        </div>
+        <div class="menu-price">$55.00</div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:3.5rem;">
+      <a href="#reservas" class="btn-magic">Ver Carta Completa</a>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCES -->
+<section class="exp-section" id="experiencias">
+  <div class="container">
+    <div style="text-align:center;max-width:600px;margin:0 auto;">
+      <span class="eyebrow">Vivirlo todo</span>
+      <h2 class="section-title">Experiencias que <em>trascienden</em></h2>
+    </div>
+
+    <div class="exp-grid">
+      <div class="exp-card">
+        <div class="exp-glow"></div>
+        <span class="exp-tag">Celebraciones</span>
+        <h3 class="exp-name">Cumpleaños en el Mundo Mágico</h3>
+        <p class="exp-desc">Decoración temática personalizada, zona exclusiva, show de luces especial y pastel encantado. Hacemos el cumpleaños más memorable que jamás hayas vivido.</p>
+        <a href="#reservas" class="exp-action">Reservar celebración →</a>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-glow" style="background:linear-gradient(90deg,var(--neon-purple),var(--neon-pink));"></div>
+        <span class="exp-tag" style="color:var(--neon-purple);text-shadow:0 0 8px rgba(191,95,255,0.6);">Eventos</span>
+        <h3 class="exp-name">Bodas & Compromisos de Ensueño</h3>
+        <p class="exp-desc">El escenario fantástico más impresionante de la ciudad para sellar el amor. Banquete mágico, decoración de cuento y recuerdos para toda la vida.</p>
+        <a href="#reservas" class="exp-action" style="color:var(--neon-purple);">Consultar disponibilidad →</a>
+      </div>
+
+      <div class="exp-card">
+        <div class="exp-glow" style="background:linear-gradient(90deg,var(--neon-yellow),var(--neon-green));"></div>
+        <span class="exp-tag" style="color:var(--neon-yellow);text-shadow:0 0 8px rgba(255,225,53,0.6);">Empresarial</span>
+        <h3 class="exp-name">Reuniones Corporativas Fuera de Serie</h3>
+        <p class="exp-desc">Salones privados con la magia del Caldero, menús ejecutivos personalizados y una ambientación que potencia la creatividad de tu equipo.</p>
+        <a href="#reservas" class="exp-action" style="color:var(--neon-yellow);">Ver paquetes corporativos →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY STRIP -->
+<div class="gallery-strip">
+  <div class="strip-track" id="strip">
+    <div class="strip-item"><span class="strip-emoji">🌻</span><span>Jardín de Girasoles</span></div>
+    <div class="strip-item"><span class="strip-emoji">🌿</span><span>La Selva Encantada</span></div>
+    <div class="strip-item"><span class="strip-emoji">✨</span><span>Magia en Cada Mesa</span></div>
+    <div class="strip-item"><span class="strip-emoji">🍄</span><span>Sabores del Bosque</span></div>
+    <div class="strip-item"><span class="strip-emoji">🦋</span><span>Experiencia Única</span></div>
+    <div class="strip-item"><span class="strip-emoji">🌸</span><span>Techo de Flores</span></div>
+    <div class="strip-item"><span class="strip-emoji">🎤</span><span>Noches de Show</span></div>
+    <div class="strip-item"><span class="strip-emoji">🕯️</span><span>El Caldero Central</span></div>
+    <!-- Duplicated for seamless loop -->
+    <div class="strip-item"><span class="strip-emoji">🌻</span><span>Jardín de Girasoles</span></div>
+    <div class="strip-item"><span class="strip-emoji">🌿</span><span>La Selva Encantada</span></div>
+    <div class="strip-item"><span class="strip-emoji">✨</span><span>Magia en Cada Mesa</span></div>
+    <div class="strip-item"><span class="strip-emoji">🍄</span><span>Sabores del Bosque</span></div>
+    <div class="strip-item"><span class="strip-emoji">🦋</span><span>Experiencia Única</span></div>
+    <div class="strip-item"><span class="strip-emoji">🌸</span><span>Techo de Flores</span></div>
+    <div class="strip-item"><span class="strip-emoji">🎤</span><span>Noches de Show</span></div>
+    <div class="strip-item"><span class="strip-emoji">🕯️</span><span>El Caldero Central</span></div>
+  </div>
+</div>
+
+<!-- RESERVAS -->
+<section class="reservas" id="reservas">
+  <div class="container-sm">
+    <span class="reservas-icon">🪄</span>
+    <h2 class="reservas-title">Abre las Puertas</h2>
+    <p class="reservas-sub">Tu aventura mágica comienza con una reserva</p>
+
+    <div class="reservas-form">
+      <input type="text" placeholder="Tu nombre encantado" />
+      <input type="tel" placeholder="WhatsApp / Teléfono" />
+      <input type="date" />
+      <select>
+        <option value="" disabled selected>Número de viajeros</option>
+        <option>1–2 almas</option>
+        <option>3–4 aventureros</option>
+        <option>5–8 exploradores</option>
+        <option>9+ gran grupo</option>
+      </select>
+      <select>
+        <option value="" disabled selected>Mundo preferido</option>
+        <option>Jardín de Girasoles</option>
+        <option>La Selva Encantada</option>
+        <option>El Escenario Mágico</option>
+        <option>El Cielo de Flores</option>
+        <option>El Rincón Fantástico</option>
+        <option>La Sala del Caldero</option>
+      </select>
+      <button class="btn-magic">✦ Conjurar Reserva ✦</button>
+    </div>
+
+    <p style="margin-top:1.5rem;font-size:0.8rem;color:var(--magic-muted);">
+      También por WhatsApp o Instagram · Respuesta en menos de 1 hora
+    </p>
+  </div>
+</section>
+
+<!-- UBICACION -->
+<section class="ubicacion" id="ubicacion">
+  <div class="container">
+    <div class="ubi-inner">
+      <div>
+        <span class="eyebrow">Encontrarnos</span>
+        <h2 class="section-title">La puerta al<br><em>mundo mágico</em></h2>
+
+        <div class="magic-line"><span></span><i>🌿</i><span></span></div>
+
+        <div class="ubi-item">
+          <div class="ubi-dot"></div>
+          <div>
+            <div class="ubi-lbl">Dirección</div>
+            <div class="ubi-val">Guayaquil, Ecuador<br><span style="font-size:0.85rem;color:var(--magic-muted);">(Confirmar dirección exacta)</span></div>
+          </div>
+        </div>
+
+        <div class="ubi-item">
+          <div class="ubi-dot" style="background:var(--neon-blue);box-shadow:0 0 10px var(--neon-blue);"></div>
+          <div>
+            <div class="ubi-lbl" style="color:var(--neon-blue);">Horario Mágico</div>
+            <div class="ubi-val">Mar – Jue: 12:00 – 22:00<br>Vie – Sáb: 12:00 – 00:00<br>Dom: 12:00 – 21:00</div>
+          </div>
+        </div>
+
+        <div class="ubi-item">
+          <div class="ubi-dot" style="background:var(--neon-purple);box-shadow:0 0 10px var(--neon-purple);"></div>
+          <div>
+            <div class="ubi-lbl" style="color:var(--neon-purple);">Contacto</div>
+            <div class="ubi-val">+593 99 XXX XXXX<br>@elcalderomagnico</div>
+          </div>
+        </div>
+
+        <div class="ubi-item" style="border:none;">
+          <div class="ubi-dot" style="background:var(--neon-pink);box-shadow:0 0 10px var(--neon-pink);"></div>
+          <div>
+            <div class="ubi-lbl" style="color:var(--neon-pink);">Grupos & Eventos</div>
+            <div class="ubi-val">Reservas especiales con<br>48h de anticipación</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ubi-map">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3986.8!2d-79.9050!3d-2.1500!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMsKwMDkn!5e0!3m2!1ses!2sec!4v1!5m2!1ses!2sec"
+          allowfullscreen=""
+          loading="lazy">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <span class="footer-brand">El Caldero Mágico</span>
+        <p class="footer-tagline">Restaurante temático de fantasía donde la magia, la naturaleza y los sabores se unen en una experiencia única.</p>
+        <div class="social-row" style="margin-top:1.5rem;">
+          <a href="#" class="soc-btn">ig</a>
+          <a href="#" class="soc-btn">fb</a>
+          <a href="#" class="soc-btn">tk</a>
+          <a href="#" class="soc-btn">wa</a>
+        </div>
+      </div>
+
+      <div class="footer-col">
+        <h4>Explorar</h4>
+        <ul>
+          <li>Nuestro mundo</li>
+          <li>Las 6 Áreas</li>
+          <li>Menú Mágico</li>
+          <li>Bebidas & Pociones</li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Experiencias</h4>
+        <ul>
+          <li>Cumpleaños</li>
+          <li>Bodas</li>
+          <li>Corporativo</li>
+          <li>Shows en vivo</li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <ul>
+          <li>Guayaquil, Ecuador</li>
+          <li>+593 99 XXX XXXX</li>
+          <li>Reservas online</li>
+          <li>@elcalderomagnico</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2025 El Caldero Mágico · Todos los derechos reservados</span>
+      <span style="font-family:'Cinzel Decorative',cursive;font-size:0.7rem;color:var(--neon-green);text-shadow:0 0 8px rgba(57,255,138,0.4);">✦ La magia nunca duerme ✦</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Fireflies
+const ff = document.getElementById('ff');
+const colors = ['#39FF8A','#00D4FF','#BF5FFF','#FF2D78','#FFE135'];
+for (let i = 0; i < 40; i++) {
+  const d = document.createElement('div');
+  d.classList.add('fly');
+  const c = colors[Math.floor(Math.random() * colors.length)];
+  d.style.cssText = `
+    left:${Math.random()*100}%;
+    top:${Math.random()*100}%;
+    background:${c};
+    box-shadow:0 0 6px ${c};
+    --tx:${(Math.random()-0.5)*200}px;
+    --ty:${(Math.random()-0.5)*200}px;
+    animation-duration:${4+Math.random()*8}s;
+    animation-delay:${Math.random()*6}s;
+  `;
+  ff.appendChild(d);
+}
+
+// Floating leaves
+const lc = document.getElementById('leaves');
+const leafEmojis = ['🌿','🍃','🌱','🍀','🌾'];
+for (let i = 0; i < 12; i++) {
+  const l = document.createElement('div');
+  l.classList.add('leaf-float');
+  l.textContent = leafEmojis[Math.floor(Math.random()*leafEmojis.length)];
+  l.style.cssText = `
+    left:${Math.random()*100}%;
+    animation-duration:${12+Math.random()*10}s;
+    animation-delay:${Math.random()*12}s;
+    font-size:${0.9+Math.random()*1.2}rem;
+  `;
+  lc.appendChild(l);
+}
+
+// Tab switching
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', function() {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('on'));
+    this.classList.add('on');
+  });
+});
+
+// Scroll reveal
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.style.opacity = '1';
+      e.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.world-card, .exp-card, .menu-row, .stat-orb').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(22px)';
+  el.style.transition = 'opacity 0.65s ease, transform 0.65s ease';
+  obs.observe(el);
+});
+</script>
+
+</body>
+</html>
